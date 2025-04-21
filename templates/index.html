@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Utility App</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="app-header">
+        <h1>📄 PDF Utility App</h1>
+        <p class="subtitle">Your all-in-one PDF toolbox</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <form action="/merge" method="POST" enctype="multipart/form-data">
+            <div class="card-header">
+              <i class="fas fa-object-group"></i>
+              <h2>Merge PDFs</h2>
+            </div>
+            <div class="upload-area" id="mergeUpload">
+              <input type="file" name="files" multiple accept="application/pdf" required>
+              <div class="upload-text">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drop files here or click to upload</p>
+                <span class="file-hint">Select multiple PDF files</span>
+              </div>
+            </div>
+            <button type="submit">
+              <i class="fas fa-magic"></i> Merge PDFs
+            </button>
+          </form>
+        </div>
+
+        <div class="feature-card">
+          <form action="/split" method="POST" enctype="multipart/form-data">
+            <div class="card-header">
+              <i class="fas fa-cut"></i>
+              <h2>Split PDF</h2>
+            </div>
+            <div class="upload-area">
+              <input type="file" name="file" accept="application/pdf" required>
+              <div class="upload-text">
+                <i class="fas fa-file-pdf"></i>
+                <p>Drop PDF here or click to upload</p>
+              </div>
+            </div>
+            <div class="input-group">
+              <input type="number" name="page" placeholder="Split at page number" required min="1">
+            </div>
+            <button type="submit">
+              <i class="fas fa-scissors"></i> Split PDF
+            </button>
+          </form>
+        </div>
+
+        <div class="feature-card">
+          <form action="/convert" method="POST" enctype="multipart/form-data">
+            <div class="card-header">
+              <i class="fas fa-image"></i>
+              <h2>Convert Image to PDF</h2>
+            </div>
+            <div class="upload-area">
+              <input type="file" name="image" accept="image/*" required>
+              <div class="upload-text">
+                <i class="fas fa-images"></i>
+                <p>Drop image here or click to upload</p>
+                <span class="file-hint">Supports JPG, PNG, etc.</span>
+              </div>
+            </div>
+            <button type="submit">
+              <i class="fas fa-exchange-alt"></i> Convert to PDF
+            </button>
+          </form>
+        </div>
+
+        <div class="feature-card">
+          <form action="/compress" method="POST" enctype="multipart/form-data">
+            <div class="card-header">
+              <i class="fas fa-compress-alt"></i>
+              <h2>Compress PDF</h2>
+            </div>
+            <div class="upload-area">
+              <input type="file" name="file" accept="application/pdf" required>
+              <div class="upload-text">
+                <i class="fas fa-file-archive"></i>
+                <p>Drop PDF here or click to upload</p>
+              </div>
+            </div>
+            <button type="submit">
+              <i class="fas fa-compress"></i> Compress PDF
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Add drag and drop functionality
+      document.querySelectorAll('.upload-area').forEach(area => {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          area.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+          area.addEventListener(eventName, () => area.classList.add('highlight'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          area.addEventListener(eventName, () => area.classList.remove('highlight'), false);
+        });
+
+        area.addEventListener('drop', handleDrop, false);
+      });
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        const input = this.querySelector('input[type="file"]');
+        input.files = files;
+        
+        // Update upload text to show selected files
+        const fileNames = Array.from(files).map(f => f.name).join(', ');
+        this.querySelector('.upload-text p').textContent = fileNames;
+      }
+    </script>
+  </body>
+</html>

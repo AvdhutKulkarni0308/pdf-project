@@ -1,0 +1,44 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Ready - PDF Utility App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="app-header">
+      <h1>🎉 PDF Ready!</h1>
+      <p class="subtitle">Your files have been processed successfully</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="card-header">
+        <i class="fas fa-check-circle"></i>
+        <h2>Download Files</h2>
+      </div>
+      <div style="padding: 1.5rem; text-align: center;">
+        {% if filenames %}
+          {% for filename in filenames %}
+            <a href="{{ url_for('download_file', filename=filename) }}" class="download-link" download>
+              <i class="fas fa-download"></i> Download {{ filename }}
+            </a><br>
+          {% endfor %}
+        {% else %}
+          <a href="{{ url_for('download_file', filename=filename) }}" class="download-link" download>
+            <i class="fas fa-download"></i> Download Result
+          </a>
+        {% endif %}
+        
+        <br><br>
+        <a href="{{ url_for('index') }}" class="back-link">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
